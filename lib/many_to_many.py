@@ -3,6 +3,12 @@ class Book:
     def __init__(self, title):
         self.title = title
         Book.all.append(self)
+    
+    def contracts(self):
+        return [contract for contract in Contract.all if contract.book == self]
+    
+    def authors(self):
+        return [contract.author for contract in self.contracts()]
 
 class Author:
     all = []
@@ -29,6 +35,8 @@ class Contract:
             raise Exception("Author must be an Author instance")
         if not isinstance(book, Book):
             raise Exception("Book must be a Book instance")
+        if not isinstance(date, str):
+            raise Exception("Date must be a string")
         if not isinstance(royalties, int):
             raise Exception("Royalties must be an integer")
         
@@ -39,5 +47,5 @@ class Contract:
         Contract.all.append(self)
     
     @classmethod
-    def contracts_by_date(cls):
-        return sorted(cls.all, key=lambda contract: contract.date)
+    def contracts_by_date(cls, date):
+        return [contract for contract in cls.all if contract.date == date]
